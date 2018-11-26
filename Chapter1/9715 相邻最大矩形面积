@@ -1,0 +1,33 @@
+
+Source Code
+
+ #include<cstdio>
+#include<cstring>
+#include<iostream>
+using namespace std;
+
+int main()
+{
+    int S, min_, max_;
+    int a[100001];
+    int b[100001];
+    scanf("%d",&S);
+    for (int i = 0; i < S; i ++)
+    {
+        scanf("%d", &a[i]);
+    }
+    max_ = 1;
+    for (int i = 0; i < S; i ++)
+    {
+        min_ = a[i];
+
+
+        for (int j = i; j < S; j ++)
+        {
+            if (a[j] < min_) min_ = a[j];
+
+            if ((j - i + 1) * min_ > max_)  max_ = (j - i + 1) * min_;
+        }
+    }
+    printf("%d", max_);
+}
