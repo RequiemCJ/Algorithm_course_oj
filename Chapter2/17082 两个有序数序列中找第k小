@@ -1,0 +1,47 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int num1[100000], num2[100000];
+int Find(int num1[], int xBeg, int xEnd, int num2[], int yBeg, int yEnd, int k)
+{
+    if (xBeg > xEnd) return num2[yBeg + k - 1];
+    if (yBeg > yEnd) return num1[xBeg + k - 1];         //递归的边界应该放在最前面！！！！
+    int xMid = xBeg + (xEnd - xBeg) / 2;
+    int yMid = yBeg + (yEnd - yBeg) / 2;
+    int halfLen = xMid + yMid - xBeg - yBeg + 2;
+    if (num1[xMid] < num2[yMid])
+    {
+        if (k < halfLen) return Find(num1, xBeg, xEnd, num2, yBeg, yMid - 1, k);
+        else return Find(num1, xMid + 1, xEnd, num2, yBeg, yEnd, k - (xMid - xBeg + 1));
+    }
+    else
+    {
+        if (k < halfLen) return Find(num1, xBeg, xMid - 1, num2, yBeg, yEnd, k);
+        else return Find(num1, xBeg, xEnd, num2, yMid + 1, yEnd, k - (yMid - yBeg + 1));
+    }
+    //if (xBeg > xEnd) return num2[yBeg + k - 1];
+    //if (yBeg > yEnd) return num1[xBeg + k - 1];
+
+}
+
+int main ()
+{
+    int len1, len2, k;
+
+    scanf("%d %d %d", &len1, &len2, &k);
+    for (int i = 1; i <= len1; i ++)
+    {
+        scanf("%d", &num1[i]);
+    }
+    for (int i = 1; i <= len2; i ++)
+    {
+        scanf("%d", &num2[i]);
+    }
+    int res = Find(num1, 1, len1, num2, 1, len2, k);
+    printf("%d", res);
+
+}
