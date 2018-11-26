@@ -1,0 +1,29 @@
+#include<cstdio>
+using namespace std;
+
+int main()
+{
+    int n, tmp, flag = 0;
+    scanf("%d", &n);
+    for (int i = 11; i < n; i ++)
+    {
+        tmp = i;
+        if (tmp % 5 != 0)
+        {
+            int j;
+            for (j = 0; j < 5; j ++)
+            {
+                tmp --;
+                if (tmp % 5 != 0) break;
+                tmp = (tmp / 5) * 4;
+            }
+            if(j == 5)
+            {
+                flag = 1;
+                printf("%d ", i);
+            }
+        }
+    }
+    if (flag == 0) printf("impossible");
+    return 0;
+}
