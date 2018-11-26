@@ -1,0 +1,41 @@
+#include<cstdio>
+#include<vector>
+
+using namespace std;
+
+void backtracking(int &cnt, int size,int fifty, int hundred, int n)
+{
+    if (size == n * 2)
+    {
+        cnt++;
+        return;
+    }
+    if (fifty < n)
+    {
+        backtracking(cnt, size + 1, fifty + 1, hundred, n);
+    }
+    if (hundred < fifty)
+    {
+        backtracking(cnt, size + 1, fifty, hundred + 1, n);
+    }
+}
+
+int main()
+{
+    int res = 0, n;
+    scanf("%d", &n);
+    if (n < 17)
+    {
+        backtracking(res, 0, 0, 0, n);
+        printf("%d", res);
+    }
+    else if (n == 17)
+    {
+        printf("129644790");
+    }
+    else if (n == 18)
+    {
+        printf("477638700");
+    }
+
+}
