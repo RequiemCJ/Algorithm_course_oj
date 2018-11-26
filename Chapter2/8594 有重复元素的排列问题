@@ -1,0 +1,56 @@
+
+#include<cstdio>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+int Findsame(vector<char> s, int k, int i)  //判断第i个元素是否在list[k,i－1]中出现过
+{
+    for (int j = k; j < i; j ++)
+    {
+        if (s[j] == s[i]) return 1;
+    }
+    return 0;
+}
+
+void backtrack(vector<vector<char> > &ans, int n, vector<char> &tmp)
+{
+    if (tmp.size() == n)
+    {
+        ans.push_back(tmp);
+        return;
+    }
+    for (int i = n; i < tmp.size(); i ++)
+    {
+        if (Findsame(tmp, n, i) == 1)
+        {
+            continue;
+        }
+        swap(tmp[i], tmp[n]);
+        backtrack(ans, n + 1, tmp);
+        swap(tmp[i], tmp[n]);
+    }
+}
+
+
+int main()
+{
+    vector<vector<char> > ans;
+    vector<char> s;
+    int n;
+    char str[16];
+    scanf("%d", &n);
+    scanf("%s", str);
+    for (int i = 0; i < n; i ++)
+    {
+        s.push_back(str[i]);
+    }
+    backtrack(ans, 0, s);
+    for (int i = 0; i < ans.size(); i ++)
+    {
+        for (int j = 0; j < n; j ++) printf("%c", ans[i][j]);
+        printf("\n");
+    }
+    printf("%d", ans.size());
+    return 0;
+}
