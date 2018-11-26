@@ -1,0 +1,73 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+int a[10000];
+
+int merge_inversion(int a[], int low, int mid, int high)
+{
+    int p = 0, i = low, j = mid + 1, cnt = 0;
+    int tmp[high - low + 1];
+    sort (a + low, a + mid);
+    sort (a + mid + 1, a + high);
+
+    while (i <= mid && j <= high)
+    {
+        if (a[i] > a[j])
+        {
+            tmp[p ++] = a[j];
+            cnt += (mid - i + 1);
+            //printf("%d\n", cnt);
+            j ++;
+        }
+        else
+        {
+            tmp[p ++] = a[i];
+            i ++;
+        }
+    }
+    if (i <= mid)
+    {
+        for (int k = i; k <= mid; k ++) tmp[p ++] = a[k];
+    }
+    else if (j <= high)
+    {
+        for (int k = j; k <= high; k ++) tmp[p ++] = a[k];
+    }
+    for (int k = 0; k < high - low + 1; k ++) a[low + k] = tmp[k];
+    //for (int i = 0; i < high - low + 1; i ++) printf("%d ", tmp[i]);
+    //printf("%d %d %d %d\n",low, mid, high, cnt);
+
+    return cnt;
+}
+
+int count_inversion(int a[], int low, int high)
+{
+    int cnt = 0, mid;
+    if (low < high)
+    {
+        mid = low + (high - low) / 2;
+        cnt += count_inversion(a, low, mid);
+        cnt += count_inversion(a, mid + 1, high);
+        cnt += merge_inversion(a, low, mid, high);
+    }
+    return cnt;
+}
+
+int main ()
+{
+    int n;
+    //vector<int> nums;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i ++)
+    {
+        scanf("%d", &a[i]);
+    }
+    int ans = count_inversion(a, 0, n - 1);
+    printf("%d", ans);
+    return 0;
+}
