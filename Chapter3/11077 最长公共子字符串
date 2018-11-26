@@ -1,0 +1,52 @@
+#include<cstdio>
+#include<vector>
+#include<cstring>
+using namespace std;
+
+int dp[10001][10001];
+int cnt = 0, t = 0;
+
+void LCS_LENGTH(char str1[], char str2[], int len1, int len2)
+{
+    for (int i = 0; i <= len1; i ++)
+    {
+        for (int j = 0; j <= len2; j ++)
+        {
+            dp[i][j] = 0;
+        }
+    }
+
+    for (int i = 1; i <= len1; i ++)
+    {
+        for (int j = 1; j <= len2; j ++)
+        {
+            if (str1[i - 1] == str2[j - 1])
+            {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                if (dp[i][j] > cnt)
+                {
+                    cnt = dp[i][j];
+                    t = i - 1;
+                }
+            }
+            else dp[i][j] = 0;
+        }
+    }
+}
+int main()
+{
+    char str1[10002], str2[10002];
+    int len1, len2;
+    scanf("%s", str1);
+    scanf("%s", str2);
+    len1 = strlen(str1);
+    len2 = strlen(str2);
+    LCS_LENGTH(str1, str2, len1, len2);
+    printf("%d\n", cnt);
+    for (int i = cnt - 1; i >= 0; i --)
+    {
+        printf("%c", str1[t - i]);
+    }
+    return 0;
+
+}
