@@ -1,0 +1,17 @@
+
+#include<cstdio>
+using namespace std;
+
+int main()
+{
+    int n;
+    double tmp, ans = 0;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i ++)
+    {
+        scanf("%lf", &tmp);
+        ans = (ans * (i - 1) + tmp) / i;
+        printf("%.2lf ", ans);
+
+    }
+}
