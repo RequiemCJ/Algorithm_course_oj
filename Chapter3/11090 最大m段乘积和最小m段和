@@ -1,0 +1,156 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int w[11][11] = {0};   //w(h,t)是S从h位开始的共t位数字组成的十进制数，约定从1开始从左向右对位进行编号
+int f[11][11] = {0};   //f(i,j)表示S的前i位数划分成j段后的最大j段乘积。
+int t[11][11] = {0};   //t(i,j)表示S的前i位数划分成j段后的最小j段和。
+int n, m, S;
+int digt[11];
+int flag1[11][11] = {0};   //打印表达式
+int flag2[11][11] = {0};
+int MaxMseqProd()
+{
+    for (int i = 1; i <= n; i ++) f[i][1] = w[1][i];
+    for (int i = 2; i <= n; i ++)
+    {
+        for (int j = 2; j <= i && j <= m; j ++)
+        {
+            int tmp = f[j - 1][j - 1] * w[j][i - j + 1];
+            flag1[i][j] = j - 1;
+            for (int k = j; k <= i - 1; k ++)
+            {
+                if (tmp < f[k][j - 1] * w[k + 1][i - k])
+                {
+                    tmp = f[k][j - 1] * w[k + 1][i - k];
+                    flag1[i][j] = k;
+                }
+            }
+            f[i][j] = tmp;
+        }
+    }
+    return f[n][m];
+}
+
+int MinMseqSum()
+{
+    for (int i = 1; i <= n; i ++) t[i][1] = w[1][i];
+    for (int i = 2; i <= n; i ++)
+    {
+        for (int j = 2; j <= i && j <= m; j ++)
+        {
+            int tmp = t[j - 1][j - 1] + w[j][i - j + 1];
+            flag2[i][j] = j - 1;
+            for (int k = j; k <= i - 1; k ++)
+            {
+                if (tmp > t[k][j - 1] + w[k + 1][i - k])
+                {
+                    tmp = t[k][j - 1] + w[k + 1][i - k];
+                    flag2[i][j] = k;
+                }
+            }
+            t[i][j] = tmp;
+        }
+    }
+    return t[n][m];
+}
+
+void InitW()
+{
+    for (int i = n; i >= 1; i --)
+    {
+        digt[i] = S % 10;
+        S /= 10;
+    }
+    for (int i = 1; i <= n; i ++)
+    {
+        for (int j = 1; j <= n - i + 1; j ++)
+        {
+            for (int k = 1; k <= j; k ++)
+            {
+                w[i][j] = w[i][j] * 10 + digt[i + k - 1];
+            }
+        }
+    }
+}
+
+
+void printExp1()
+{
+    int tn = n, newbegin = 1;
+    int tmp[11] = {0};
+    for (int i = m; i >= 1; i --)
+    {
+        tmp[flag1[tn][i]] = 1;
+        tn = flag1[tn][i];
+    }
+
+    for (int i = 1; i <= n; i ++)
+    {
+        if (newbegin == 0 || digt[i] != 0)
+        {
+            printf("%d", digt[i]);
+            newbegin = 0;
+        }
+        if (tmp[i] == 1)
+        {
+            if (newbegin == 1 && digt[i] == 0) printf("0");
+            printf("*");
+            newbegin = 1;
+        }
+    }
+    printf("=%d\n", f[n][m]);
+}
+
+void printExp2()
+{
+    int tn = n, newbegin = 1;
+    int tmp[11] = {0};
+    for (int i = m; i >= 1; i --)
+    {
+        tmp[flag2[tn][i]] = 1;
+        tn = flag2[tn][i];
+    }
+
+    for (int i = 1; i <= n; i ++)
+    {
+        if (newbegin == 0 || digt[i] != 0)
+        {
+            printf("%d", digt[i]);
+            newbegin = 0;
+        }
+        if (tmp[i] == 1)
+        {
+            if (newbegin == 1 && digt[i] == 0) printf("0");
+            printf("+");
+            newbegin = 1;
+        }
+    }
+    printf("=%d", t[n][m]);
+}
+
+
+int main()
+{
+
+    cin >> n >> m >> S;
+
+    InitW();
+
+    printf("%d %d\n", MaxMseqProd(),MinMseqSum());
+
+    /*for (int i = 1; i <= n; i ++)
+    {
+        for (int j = 1; j <= m && j <= i; j ++)
+        {
+            printf("%d ", flag1[i][j]);
+        }
+        printf("\n");
+    }*/
+    printExp1();
+    printExp2();
+    return 0;
+
+}
+
