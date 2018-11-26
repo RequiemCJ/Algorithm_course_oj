@@ -1,0 +1,118 @@
+#include<cstdio>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+int ***a = new int **[51];
+
+int MaxSum1(int n, int *a)
+{
+    int sum = 0, b = 0;
+    for (int i = 1; i <= n; i ++)
+    {
+        if (b > 0) b += a[i];
+        else b = a[i];
+        if (b > sum) sum = b;
+    }
+    return sum;
+}
+
+int MaxSum2(int m, int n, int **a)
+{
+    int sum = 0;
+    int *b = new int[n + 1];
+
+    for (int i = 1; i <= m; i ++)
+    {
+        for (int k = 1; k <= n; k ++) b[k] = 0;
+        for (int j = i; j <= m; j ++)
+        {
+            for (int k = 1; k <= n; k ++)
+            {
+                b[k] += a[j][k];
+            }
+            int maxVal = MaxSum1(n, b);
+            if (maxVal > sum) sum = maxVal;
+        }
+    }
+
+    delete []b;
+    b = 0;
+    return sum;
+}
+
+void helper1(int **b, int m, int n)
+{
+    for (int i = 1; i <= m; i ++)
+    {
+        for (int j = 1; j <= n; j ++)
+        {
+            b[i][j] = 0;
+        }
+    }
+}
+
+void helper2(int **b, int ***a, int m, int n, int t)
+{
+    for (int i = 1; i <= m; i ++)
+    {
+        for (int j = 1; j <= n; j ++)
+        {
+            b[i][j] += a[i][j][t];
+        }
+    }
+}
+
+int MaxSum3(int m, int n, int t, int ***a)
+{
+    int sum = 0;
+    int **b = new int*[n + 1];
+    for (int i = 1; i <= n; i ++)
+    {
+        b[i] = new int[m + 1];
+    }
+
+    for (int i = 1; i <= t; i ++)
+    {
+        helper1(b, m, n);
+        for (int j = i; j <= t; j ++)
+        {
+            helper2(b, a, m, n, j);
+            int maxVal = MaxSum2(m, n, b);
+            if (maxVal > sum) sum = maxVal;
+        }
+    }
+    for (int i = 1; i <= n; i ++) delete []b[i];
+    delete []b;
+    b = 0;
+    return sum;
+}
+
+
+
+
+int main()
+{
+    int m, n, p;
+    scanf("%d %d %d", &m, &n, &p);
+
+    for (int i = 1; i <= m; i ++)
+    {
+        a[i] = new int *[n + 1];
+        for (int j = 1; j <= n; j ++)
+            a[i][j] = new int [p + 1];
+    }
+
+    for (int i = 1; i <= m; i ++)
+    {
+        for (int j = 1; j <= n; j ++)
+        {
+            for (int k = 1; k <= p; k ++)
+                cin >> a[i][j][k];
+        }
+    }
+    printf("%d", MaxSum3(m, n, p, a));
+
+}
