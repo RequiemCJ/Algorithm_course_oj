@@ -1,0 +1,60 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int n;
+long long res1 = 1, res2 = 1;
+
+void helper1()  //注意到： 若a+b等于一个常数，则|a-b|越小，ab就越大。
+{
+    if (n <= 4)
+    {
+        if (n <= 2) res1 = n;
+        else res1 = n - 1;
+        return;
+    }
+    int tmp[20], sum = 2, t = 3;
+    tmp[1] = 2;
+    while (sum + t <= n)
+    {
+        sum += t;
+        tmp[t - 1] = t;
+        t ++;
+    }
+
+    if (sum < n)
+    {
+        sum = n - sum;
+        for (int i = t - 2; i > t - 2 - sum; i --) tmp[i] ++;
+    }
+    for (int i = 1; i <= t - 2; i ++) res1 *= tmp[i];
+}
+
+void helper2()              //任意加数的差距不超过正负1
+{       //极尽拆解，尽可能先将n拆成3,3,3,...,3；若拆成若干3后还有剩余，则为2，或2和2
+    res2 = 1;
+    if (n % 3 == 0)
+    {
+        for (int i = 1; i <= n / 3; i ++) res2 *= 3;
+    }
+    else if (n % 3 == 1)
+    {
+        for (int i = 1; i <= (n - 4) / 3; i ++) res2 *= 3;
+        res2 *= 4;
+    }
+    else
+    {
+        for (int i = 1; i <= (n - 2) / 3; i ++) res2 *= 3;
+        res2 *= 2;
+    }
+}
+
+int main()
+{
+    cin >> n;
+    helper1();
+    helper2();
+    cout << res1 << " " << res2;
+}
+
