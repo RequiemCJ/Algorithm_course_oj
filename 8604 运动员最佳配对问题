@@ -1,0 +1,60 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int P[11][11];
+int Q[11][11];
+int n;
+int val = 0, bestVal = 0;
+int per[11], bestper[11];
+
+void backtrack(int i)
+{
+    if (i > n)
+    {
+        if (val > bestVal)
+        {
+            for (int i = 1; i <= n; i ++)   bestper[i] = per[i];
+            bestVal = val;
+        }
+        return;
+    }
+    else
+    {
+        for (int j = i; j <= n; j ++)
+        {
+            val += P[i][per[j]] * Q[per[j]][i];
+            swap(per[i], per[j]);
+            backtrack(i + 1);
+            swap(per[j], per[i]);
+            val -= P[i][per[j]] * Q[per[j]][i];
+        }
+    }
+    return;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 1; i <= n; i ++)
+    {
+        for (int j = 1; j <= n; j ++)
+        {
+            cin >> P[i][j];
+        }
+    }
+    for (int i = 1; i <= n; i ++)
+    {
+        for (int j = 1; j <= n; j ++)
+        {
+            cin >> Q[i][j];
+        }
+    }
+    for (int i = 1; i <= n; i ++) per[i] = i;
+    backtrack(1);
+    //for (int i = 1; i <= n; i ++) cout << bestper[i] << " ";
+    //cout << "\n";
+    cout << bestVal;
+    return 0;
+}
