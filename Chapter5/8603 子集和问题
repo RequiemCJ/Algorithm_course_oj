@@ -1,0 +1,50 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int e[101];
+int v[101] = {0};
+int cv = 0, found = 0;
+int n, c;
+
+void backtrack(int i)
+{
+    if (found == 1 || i > n) {
+        return;
+    }
+    if (cv + e[i] == c)
+    {
+        v[i] = 1;
+        found = 1;
+        for (int i = 1; i <= n; i ++)       //找到后马上输出
+        {
+            if (v[i] == 1) cout << e[i] << " ";
+        }
+        return;
+    }
+    if (cv + e[i] != c)     //因为有负值的存在
+    {
+        cv += e[i];
+        v[i] = 1;
+        backtrack(i + 1);
+        v[i] = 0;
+        cv -= e[i];
+    }
+    backtrack(i + 1);
+    return;
+}
+
+int main()
+{
+
+    cin >> n >> c;
+    for (int i = 1; i <= n; i ++)
+    {
+        cin >> e[i];
+    }
+    backtrack(1);
+    if (found == 0) cout << "No Solution";
+
+    return 0;
+}
