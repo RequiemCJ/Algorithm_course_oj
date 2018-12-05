@@ -1,0 +1,36 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int axis[100001] = {0};
+
+int greedySelector(int n)
+{
+    int baseLoc = axis[1] + 8;
+    int cnt = 1;
+    for (int i = 1; i <= n; i ++)
+    {
+        if (axis[i] <= baseLoc) continue;
+        else
+        {
+            baseLoc = axis[i] + 8;
+            cnt ++;
+        }
+    }
+    return cnt;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i ++)
+    {
+        cin >> axis[i];
+    }
+    sort(axis + 1, axis + n + 1);
+    int res = greedySelector(n);
+    cout << res;
+    return 0;
+}
