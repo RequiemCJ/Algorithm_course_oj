@@ -1,0 +1,68 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+int n, cost = 0, bestcost;
+int C[12][12];
+int per[12], bestper[12];
+
+void backtrack(int i)
+{
+    if (i > n)
+    {
+        if (cost <= bestcost)
+        {
+            if (cost == bestcost)
+            {
+                int isSmaller = 0;
+                for (int i = 1; i <= n; i ++)   //小编号工作优先分配给小编号的人
+                {
+                    if (bestper[i] < per[i]) break;
+                    else if(bestper[i] > per[i])
+                    {
+                        isSmaller = 1;
+                    }
+                }
+                if (isSmaller == 1)
+                    for (int i = 1; i <= n; i ++) bestper[i] = per[i];
+            }
+            else
+            {
+                bestcost = cost;
+                for (int i = 1; i <= n; i ++) bestper[i] = per[i];
+            }
+        }
+        return;
+    }
+    else
+    {
+        for (int j = i; j <= n; j ++)
+        {
+            cost += C[i][per[j]];
+            swap(per[j], per[i]);
+            backtrack(i + 1);
+            swap(per[j], per[i]);
+            cost -= C[i][per[j]];
+        }
+    }
+    return;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 1; i <= n; i ++)
+    {
+        for (int j = 1; j <= n; j ++)
+        {
+            cin >> C[i][j];
+        }
+        bestcost += C[i][1];
+    }
+    for (int i = 1; i <= n; i ++) per[i] = i;
+    backtrack(1);
+    cout << bestcost << "\n";
+    for (int i = 1; i <= n; i ++) cout << bestper[i] << " ";
+    return 0;
+}
