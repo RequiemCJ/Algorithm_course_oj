@@ -1,0 +1,38 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+class JobNode {
+    friend void Greedy(JobNode *, int, int);
+    friend void main(void);
+
+public:
+    operator int() const {return time;}
+private:
+    int ID, time;
+};
+
+class MachineNode {
+    friend void Greedy(JobNode *, int, int);
+public:
+    operator int () const {return time;}
+private:
+    int ID, avail;
+};
+
+void Greedy(int a[], int n, int m)
+{
+    if (n <= m)
+    {
+        return;
+    }
+    Sort(a, n);
+    MinHeap<MachineNode> H(m);
+
+}
+
+void main()
+{
+
+}
