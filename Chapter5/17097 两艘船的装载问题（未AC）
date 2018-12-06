@@ -1,0 +1,176 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n, n2 = 0, c1, c2, ans1, ans2;
+int w[31], w1[31] , w2[31], t[31] = {0};
+int res1[31] = {0}, res2[31] = {0};
+int cw = 0, bestw = 0, cnt1 = 0, cnt2 = 0, cnt = 0;
+
+void backtrack_1(int i)
+{
+    if (i > n)
+    {
+        if (cw > bestw)
+        {
+            bestw = cw;
+            for (int i = 1; i <= n; i ++)
+            {
+                res1[i] = t[i];
+            }
+            cnt1 = cnt;
+        }
+        return;
+    }
+
+    if (cw + w[i] <= c1)
+    {
+        cw += w[i];
+        t[i] = 1;
+        cnt ++;
+        backtrack_1(i + 1);
+        cnt --;
+        t[i] = 0;
+        cw -= w[i];
+    }
+    backtrack_1(i + 1);
+    return;
+}
+
+void backtrack_2(int i)
+{
+    if (i > n2)
+    {
+        if (cw > bestw)
+        {
+            bestw = cw;
+            for (int i = 1; i <= n2; i ++)
+            {
+                res2[i] = t[i];
+            }
+            cnt2 = cnt;
+        }
+        return;
+    }
+
+    if (cw + w2[i] <= c2)
+    {
+        cw += w2[i];
+        t[i] = 1;
+        cnt ++;
+        backtrack_2(i + 1);
+        cnt --;
+        t[i] = 0;
+        cw -= w2[i];
+    }
+    backtrack_2(i + 1);
+    return;
+}
+
+void init()
+{
+    bestw = 0;
+    for (int i = 1; i <= n; i ++) t[i] = 0;
+    cnt = 0;
+    cw = 0;
+}
+
+void solution1()
+{
+    backtrack_1(1);
+    ans1 = bestw;
+    n2 = 0;
+    for (int i = 1; i <= n; i ++)
+    {
+        if (res1[i] == 0) w2[++n2] = w[i];
+    }
+    init();
+    backtrack_2(1);
+    ans2 = bestw;
+}
+
+void solution2()
+{
+    cnt1 = 0;
+    cnt2 = 0;
+    int t = c1;
+    c1 = c2;
+    c2 = t;
+    for (int i = 1; i <= n; i ++)
+    {
+        res1[i] = 0;
+    }
+    init();
+    solution1();
+}
+
+void solution3()
+{
+    int r1 = c1, r2 = c2;
+    int total = 0;
+    sort(w + 1, w + n + 1);
+    for (int i = n; i >= 1; i --)
+    {
+        if (r1 > r2)
+        {
+            int t = r1;
+            r1 = r2;
+            r2 = t;
+        }
+        if (w[i] <= r1)
+        {
+            total += w[i];
+            r1 -= w[i];
+        }
+        else if (w[i] <= r2)
+        {
+            total += w[i];
+            r2 -= w[i];
+        }
+        else continue;
+    }
+    cout << total << "\n";
+}
+
+void solution4()
+{
+    int total = 0;
+    int r1 = c1, r2 = c2;
+    for (int i = 1; i <= n; i ++)
+    {
+        if (r1 < r2)
+        {
+            int t = r1;
+            r1 = r2;
+            r2 = t;
+        }
+        if (w[i] <= r1)
+        {
+            total ++;
+            r1 -= w[i];
+        }
+        else if (w[i] <= r2)
+        {
+            total ++;
+            r2 -= w[i];
+        }
+        else continue;
+    }
+
+    cout << total;
+}
+
+int main()
+{
+    cin >> n >> c1 >> c2;
+    for (int i = 1; i <= n; i ++)
+    {
+        cin >> w[i];
+    }
+    solution1();
+    cout << ans1 <<" " << ans2 << " " << cnt1 + cnt2 << "\n";
+    solution2();
+    cout << ans2 <<" " << ans1 << " " << cnt1 + cnt2 << "\n";
+    solution3();
+    solution4();
+}
