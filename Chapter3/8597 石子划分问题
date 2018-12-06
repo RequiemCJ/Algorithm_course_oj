@@ -1,0 +1,51 @@
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+int dp[1001][1001];
+int stone[1001];
+int n, m;
+
+void helper()
+{
+    sort(stone + 1, stone + n + 1);
+    for (int i = 1; i <= n; i ++)   dp[i][i] = 0;
+    for (int i = 1; i <= n; i ++)   dp[i][1] = (stone[i] - stone[1]) * (stone[i] - stone[1]);
+    for (int j = 2; j <= m; j ++)       //份数
+    {
+        for (int i = j + 1; i <= n; i ++)   //石子数
+        {
+            int minVal = dp[i - 1][j - 1];
+            for (int k = i - 1; k >= j - 1; k --)
+            {
+                int tmp = (stone[i] - stone[k + 1]) * (stone[i] - stone[k + 1]) + dp[k][j - 1];
+                if (tmp < minVal) minVal = tmp;
+            }
+            dp[i][j] = minVal;
+        }
+    }
+
+}
+
+int main()
+{
+
+    cin >> n >> m;
+    for (int i = 1; i <= n; i ++)
+    {
+        cin >> stone[i];
+    }
+    helper();
+    //for (int i = 1; i <= n; i ++)
+    //{
+    //   for (int j = 1; j <= m; j ++)
+    //  {
+    //      cout << dp[i][j] << " ";
+    //  }
+    //   cout << "\n";
+    // }
+    cout << dp[n][m];
+
+}
