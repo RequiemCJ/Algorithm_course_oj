@@ -1,0 +1,37 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+
+int n;
+int t[10001], e[10001];
+
+int helper()
+{
+    int total = 0;
+    for (int i = 1; i <= n; i ++)
+    {
+        int m = 1;
+        for (int j = 1; j <= n; j ++)
+        {
+            if (e[j] > e[m]) m = j;
+        }
+        total += e[m];
+        for (int k = 1; k <= n; k ++)       //去掉与已被占用的时刻相同的效益
+        {
+            if (t[k] == t[m]) e[k] = 0;
+        }
+    }
+    return total;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 1; i <= n; i ++) cin >> t[i];
+    for (int i = 1; i <= n; i ++) cin >> e[i];
+    int res = helper();
+    cout << res;
+    return 0;
+}
