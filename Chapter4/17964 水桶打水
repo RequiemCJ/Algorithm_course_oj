@@ -1,0 +1,33 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+
+int n, r;
+int q[1001] = {0}, t[100001];
+
+int helper()
+{
+    int cost = 0;
+    for (int i = 1; i <= n; i ++)
+    {
+        int m = 1;
+        for (int j = 1; j <= r; j ++)
+        {
+            if (q[j] < q[m]) m = j;
+        }
+        q[m] += t[i];
+        cost += q[m];
+    }
+    return cost;
+}
+
+int main()
+{
+    cin >> n >> r;
+    for (int i = 1; i <= n; i ++) cin >> t[i];
+    sort(t + 1, t + n + 1);
+    cout << helper();
+    return 0;
+}
