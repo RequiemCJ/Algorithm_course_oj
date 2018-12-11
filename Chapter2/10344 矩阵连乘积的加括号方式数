@@ -1,0 +1,17 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+int n;
+int P[21] = {0};
+int main()
+{
+    cin >> n;
+    P[1] = 1;
+    for (int i = 2; i <= n; i ++)
+    {
+        for (int j = 1; j < i; j ++) P[i] += (P[j] * P[i - j]);
+    }
+    cout << P[n];
+    return 0;
+}
