@@ -1,0 +1,44 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+int n;
+double postx, posty, res = 0;
+double x[10001], y[10001];
+double X[10001], Y[10001];
+
+double dist(double x, double y)
+{
+    double t1 = abs(x - postx);
+    double t2 = abs(y - posty);
+
+    return t1 + t2;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> x[i];
+        X[i] = x[i];
+        cin >> y[i];
+        Y[i] = y[i];
+    }
+    sort(x + 1, x + n + 1);
+    sort(y + 1, y + n + 1);
+    if (n % 2 == 1)
+    {
+        postx = x[(1 + n) / 2];
+        posty = y[(1 + n) / 2];
+    }
+    else
+    {
+        postx = (x[(1 + n) / 2] + x[(1 + n) / 2 + 1]) / 2;
+        posty = (y[(1 + n) / 2] + y[(1 + n) / 2 + 1]) / 2;
+    }
+    for (int i = 1; i <= n; i ++) res += dist(X[i], Y[i]);
+    cout << res;
+    return 0;
+}
