@@ -1,0 +1,43 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+
+int n, m;
+int a[10001];
+int b[10001] = {0};
+int c[10001] = {0};
+
+int MaxSum(int m, int n)
+{
+    if (n < m || m < 1) return 0;
+
+    for (int i = 1; i <= m; i ++)
+    {
+        b[i] = b[i -1] + a[i];
+        c[i - 1] = b[i];
+        int max_ = b[i];
+        for (int j = i + 1; j <= n - m + i; j ++)
+        {
+            b[j] = b[j - 1] > c[j - 1] ? b[j - 1] + a[j] : c[j - 1] + a[j];
+            c[j - 1] = max_;
+            if (max_ < b[j]) max_ = b[j];
+        }
+        c[i + n - m] = max_;
+    }
+    int sum = 0;
+    for (int j = m; j <= n; j ++)
+    {
+        if (sum < b[j]) sum = b[j];
+    }
+    return sum;
+}
+
+int main()
+{
+    cin >> n >> m;
+    for(int i = 1; i <= n; i ++) cin >> a[i];
+    cout << MaxSum(m, n);
+    return 0;
+}
